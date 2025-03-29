@@ -1,5 +1,6 @@
 function _init()
     --printh("Start", "logs/log.txt", true)
+    menuitem(1, "toggle music", function() play_music() end)
     selected = 0
     tilesize = 8
     tick = 0
@@ -10,7 +11,8 @@ function _init()
     placeSmelter(12,8) --for display only
     placeTrack(12,10,0) --for display only
     placeSeller(12,12) --for display only
-
+    playing = false
+    play_music()
 
     placeSeller(9,14)
 end
@@ -20,6 +22,7 @@ function _update60()
     clock()
     for s in all(stations) do s:update() end
     for o in all(ores) do o:update() end
+    
 end
 
 function _draw()
@@ -53,4 +56,10 @@ end
 
 function distance(x1, y1, x2, y2)
 	return abs(x1-x2) + abs(y1-y2)
+end
+
+function play_music()
+    playing = not playing
+    if(playing) music(0)
+    if(not playing)music(-1)
 end
