@@ -1,18 +1,18 @@
 # pico-8-automatron
 Automation based video game
 
-Controls:
-	-arrow keys: move cursor
-	-X : place selected structure
-	-while holding Z/Y + up/down arrows: change selection
-	-ENTER: pause menu
+### Controls:
+- arrow keys: move cursor
+- X : place selected structure
+- while holding Z/Y + up/down arrows: change selection
+- ENTER: pause menu
 
-Structures:
-	-Ore Generator
-	-Smelter
-	-Track (directional placement indicated by arrow)
-	-Sell Box
-	-Delete structure
+### Structures:
+- Ore Generator
+- Smelter
+- Track (directional placement indicated by arrow)
+- Sell Box
+- Delete structure
 
 Ore has to pass by Smelter to get smelted and Sell box to be sold
 
