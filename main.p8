@@ -1,16 +1,17 @@
 function _init()
-    --printh("Start", "logs/log.txt", true)
+    printh("Start", "logs/log.txt", true)
     menuitem(1, "toggle music", function() play_music() end)
     selected = 0
     tilesize = 8
     tick = 0
     time = 0
-    balance = 400
+    balance = 200
     stations = {}
     ores = {}
-    placeSmelter(12,8) --for display only
-    placeTrack(12,10,0) --for display only
-    placeSeller(12,12) --for display only
+    placeSmelter(12,7) --for display only
+    placeTrack(12,8,0) --for display only
+    placeSeller(12,9) --for display only
+    placeCrafter(12,11)
     playing = false
     play_music()
 
@@ -30,12 +31,12 @@ function _draw()
     map(0,0)
     for s in all(stations) do s:draw() end
     for o in all(ores) do o:draw() end
-    cursor:draw()
-    orientation_indicator:draw()
     print("bALANCE:", 90, 10, 9)
     print("$", 90,17,10)
     print(balance, 94,17,10)
     inventory:draw()
+    cursor:draw()
+    orientation_indicator:draw()
 end
 
 function log(text)

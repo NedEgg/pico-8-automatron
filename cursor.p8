@@ -18,23 +18,44 @@ cursor = {}
             if(btnp(⬆️) and inventory.selected ~= 0) inventory.selected -= 1
         end
         if(btnp(❎) and self.x ~= 10 and self.y ~= 15 and self.x ~= 0 and self.y ~= 0) then
-            if(inventory.selected == 0 and balance >= inventory.prices[inventory.selected+1]) then
-                placeGenerator(self.x, self.y)
-                balance -= inventory.prices[inventory.selected+1]
+            -- Check if there's already a station at this position
+            local canPlace = true
+            for s in all(stations) do
+                if self.x == s.x and self.y == s.y then
+                    canPlace = false
+                    break
+                end
             end
-            if(inventory.selected == 1 and balance >= inventory.prices[inventory.selected+1]) then
-                placeSmelter(self.x, self.y)
-                balance -= inventory.prices[inventory.selected+1]
+            
+            if canPlace then
+                if(inventory.selected == 0 and balance >= inventory.prices[inventory.selected+1]) then
+                    placeGenerator(self.x, self.y)
+                    balance -= inventory.prices[inventory.selected+1]
+                end
+                if(inventory.selected == 1 and balance >= inventory.prices[inventory.selected+1]) then
+                    placeSmelter(self.x, self.y)
+                    balance -= inventory.prices[inventory.selected+1]
+                end
+                if(inventory.selected == 2 and balance >= inventory.prices[inventory.selected+1]) then
+                    placeTrack(self.x, self.y, R)
+                    balance -= inventory.prices[inventory.selected+1]
+                end
+                if(inventory.selected == 3 and balance >= inventory.prices[inventory.selected+1]) then
+                    placeSeller(self.x, self.y)
+                    balance -= inventory.prices[inventory.selected+1]
+                end
+                if(inventory.selected == 4 and balance >= inventory.prices[inventory.selected+1]) then
+                    placeWoodspawn(self.x, self.y)
+                    balance -= inventory.prices[inventory.selected+1]
+                end
+                if(inventory.selected == 5 and balance >= inventory.prices[inventory.selected+1]) then
+                    placeCrafter(self.x, self.y)
+                    balance -= inventory.prices[inventory.selected+1]
+                end
             end
-            if(inventory.selected == 2 and balance >= inventory.prices[inventory.selected+1]) then
-                placeTrack(self.x, self.y, R)
-                balance -= inventory.prices[inventory.selected+1]
-            end
-            if(inventory.selected == 3 and balance >= inventory.prices[inventory.selected+1]) then
-                placeSeller(self.x, self.y)
-                balance -= inventory.prices[inventory.selected+1]
-            end
-            if(inventory.selected == 4) then
+            
+            -- Delete station (selected == 6) doesn't need the position check
+            if(inventory.selected == 6) then
                 for s in all(stations) do
                     if(self.x == s.x and self.y == s.y) del(stations, s)
                 end
@@ -56,13 +77,17 @@ orientation_indicator = {}
 
 inventory = {}
     inventory.selected = 0
-    inventory.max = 4
-    inventory.prices = {100, 80, 2, 200, 0}
+    inventory.max = 6
+    inventory.prices = {100, 800, 20, 4000, 3000, 2300, 0}
+    inventory.stations = {"ore generator", "smelter", "track", "sell box", "wood generator", "crafter", "eraser"}
     inventory.draw = function(self)
-        rect(94,46+(16*self.selected),
-             105,57+(16*self.selected),7)
-        print("$", 110, 49+(16*self.selected), 10)
-        print(self.prices[self.selected+1], 115, 49+(16*self.selected), 10)
+        rect(94,46+(8*self.selected),
+             105,57+(8*self.selected),7)
+        print("$", 107, 49+(8*self.selected), 10)
+        print(self.prices[self.selected+1], 112, 49+(8*self.selected), 10)
+        rectfill(14,120,70,128,1)
+        rect(13,120,71,129,7)
+        print(inventory.stations[self.selected+1],15,122,6)
     end
 
 function deleteStation(sx, sy)

@@ -1,24 +1,39 @@
-function spawnOre(sx, sy)
+function spawnOre(sx, sy, sp)
     local ore = {}
     ore.x = sx
     ore.y = sy
     ore.life = 30
-    ore.sprite = 32
+    ore.sprite = sp
     ore.smelted = false
+    ore.price = 0
     ore.moveDir = nil
     ore.moveTimer = 0  -- Controls movement speed (higher = slower)
     ore.moveDelay = 10 -- Adjust this for speed (e.g., 10 = ~half speed)
 
+    -- Set base price based on sprite type
+    if sp == 32 then      -- Raw ore
+        ore.price = 2
+    elseif sp == 33 then  -- Smelted ore
+        ore.price = 5
+        ore.smelted = true
+    elseif sp == 34 then  -- Wood
+        ore.price = 3     -- Wood is worth more than raw ore but less than smelted
+    elseif sp >= 35 then  -- Furniture (sprites 35+)
+        ore.price = 20
+        ore.smelted = true  -- Treat furniture as "smelted" for any smelting checks
+    end
+
     ore.update = function(self)
-        -- Check for smelters/sellers (unchanged)
+        -- Smelter interaction (wood and furniture can't be smelted)
         for t in all(stations) do
             if distance(self.x, self.y, t.x, t.y) <= 1 then
-                if t.flag == 4 then -- Smelter
+                if t.flag == 4 and self.sprite == 32 then -- Only raw ore can be smelted
                     self.smelted = true
                     self.sprite = 33
+                    self.price = 5  -- Update price after smelting
                     sfx(rnd(flr(2)+1))
                 elseif t.flag == 5 then -- Seller
-                    balance += self.smelted and 20 or 10
+                    balance += self.price
                     del(ores, self)
                     sfx(0)
                     return
